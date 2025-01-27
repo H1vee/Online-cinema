@@ -1,1 +1,16 @@
+# Rider specific
 .idea/
+
+
+# Ignore the build folders for all projects
+**/bin/
+**/obj/
+
+
+# VS and VS code specific
+.vs/
+.vscode/
+
+
+# NuGet package folders
+**/*.nupkg
