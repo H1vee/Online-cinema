@@ -1,3 +1,4 @@
+
 using Microsoft.EntityFrameworkCore;
 using Cinema.Infrastructure.Entities;
 
@@ -46,4 +47,12 @@ namespace Cinema.Infrastructure.Data
     }
 }
 
+
+
+namespace Cinema.Infrastructure.Data;
+
+public class ApplicationDbContext
+{
+    
+}
 
