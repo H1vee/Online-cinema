@@ -20,9 +20,7 @@ namespace Cinema.Core.Mapping
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.TicketID))
                 .ForMember(dest => dest.MovieTitle, opt => opt.MapFrom(src => src.Showtime.Movie.Title))
                 .ForMember(dest => dest.ShowDateTime, opt => opt.MapFrom(src => src.Showtime.ShowDateTime))
-                .ForMember(dest => dest.SeatNumber, opt => opt.MapFrom(src => src.Seat.SeatNumber))
-                .ForMember(dest => dest.FinalPrice, opt => opt.MapFrom(src => src.FinalPrice))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
+                .ForMember(dest => dest.SeatNumber, opt => opt.MapFrom(src => src.Seat.SeatNumber));
 
             CreateMap<TicketDTO, Ticket>()
                 .ForMember(dest => dest.TicketID, opt => opt.MapFrom(src => src.Id))
