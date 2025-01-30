@@ -5,7 +5,6 @@ namespace Cinema.Core.DTOs
         public int Id { get; set; }
         public int MovieId { get; set; }
         public int HallId { get; set; }
-        public DateTime ShowtimeDateTime { get; set; }
-        public decimal TicketPrice { get; set; }
+        public DateTime ShowDateTime { get; set; }
     }
 }
