@@ -20,6 +20,7 @@ namespace Cinema.Core.Mapping
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.TicketID))
                 .ForMember(dest => dest.MovieTitle, opt => opt.MapFrom(src => src.Showtime.Movie.Title))
                 .ForMember(dest => dest.ShowDateTime, opt => opt.MapFrom(src => src.Showtime.ShowDateTime))
+                .ForMember(dest => dest.RowNumber, opt => opt.MapFrom(src => src.Seat.RowNumber))
                 .ForMember(dest => dest.SeatNumber, opt => opt.MapFrom(src => src.Seat.SeatNumber));
 
             CreateMap<TicketDTO, Ticket>()
@@ -32,7 +33,7 @@ namespace Cinema.Core.Mapping
 
             CreateMap<User, UserDTO>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserID))
-                .ForMember(dest => dest.Roles, opt => opt.MapFrom(src => src.UserRoleAssignment.Select(ura => ura.UserRole.RoleName).ToList()));
+                .ForMember(dest => dest.Roles, opt => opt.MapFrom(src => src.UserRoleAssignments.Select(ura => ura.UserRole.RoleName).ToList()));
 
             CreateMap<UserDTO, User>()
                 .ForMember(dest => dest.UserID, opt => opt.MapFrom(src => src.Id))
