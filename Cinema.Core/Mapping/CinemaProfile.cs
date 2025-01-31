@@ -40,6 +40,26 @@ namespace Cinema.Core.Mapping
                 .ForMember(dest => dest.RegistrationDate, opt => opt.Ignore())
                 .ForMember(dest => dest.UserRoleAssignments, opt => opt.Ignore());
 
+            CreateMap<Showtime, ShowtimeDTO>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ShowtimeID))
+                .ForMember(dest => dest.MovieTitle, opt => opt.MapFrom(src => src.Movie.Title))
+                .ForMember(dest => dest.HallName, opt => opt.MapFrom(src => src.Hall.Name));
+
+            CreateMap<ShowtimeDTO, Showtime>()
+                .ForMember(dest => dest.ShowtimeID, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.MovieID, opt => opt.Ignore())
+                .ForMember(dest => dest.HallID, opt => opt.Ignore());
+
+            CreateMap<Sale, SaleDTO>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.SaleID))
+                .ForMember(dest => dest.UserFullName, opt => opt.MapFrom(src => src.User.FullName))
+                .ForMember(dest => dest.Tickets, opt => opt.MapFrom(src => src.Tickets));
+
+            CreateMap<SaleDTO, Sale>()
+                .ForMember(dest => dest.SaleID, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.UserID, opt => opt.Ignore())
+                .ForMember(dest => dest.Tickets, opt => opt.MapFrom(src => src.Tickets));
+
         }
     }
 }
