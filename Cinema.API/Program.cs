@@ -1,4 +1,5 @@
 using Cinema.Infrastructure.Data;
+using Cinema.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Cinema.Core.Mapping;
 
@@ -12,6 +13,7 @@ builder.Services.AddAutoMapper(typeof(CinemaProfile));
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
