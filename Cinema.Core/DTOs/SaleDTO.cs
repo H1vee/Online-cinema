@@ -1,0 +1,12 @@
+namespace Cinema.Core.DTOs
+{
+    public class SaleDTO
+    {
+        public int Id { get; set; }
+        public string UserFullName { get; set; } = string.Empty;
+        public DateTime PurchaseDate { get; set; }
+        public decimal TotalAmount { get; set; }
+        public List<TicketDTO> Tickets { get; set; } = new();
+    }
+}
+
