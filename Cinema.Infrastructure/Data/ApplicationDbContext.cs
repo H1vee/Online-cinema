@@ -45,5 +45,3 @@ namespace Cinema.Infrastructure.Data
        }
     }
 }
-
-

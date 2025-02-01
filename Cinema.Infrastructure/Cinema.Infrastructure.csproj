@@ -18,4 +18,5 @@
     <ItemGroup>
         <ProjectReference Include="..\Cinema.Core\Cinema.Core.csproj" />
     </ItemGroup>
+
 </Project>
