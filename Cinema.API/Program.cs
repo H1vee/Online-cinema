@@ -1,10 +1,13 @@
 using Cinema.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Cinema.Core.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddAutoMapper(typeof(CinemaProfile));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
