@@ -41,8 +41,11 @@ namespace Cinema.Core.Services
         public async Task<bool> DeleteTicketAsync(int id)
         {
             var ticket = await _unitOfWork.Tickets.GetByIdAsync(id);
-            if (ticket == null) return false;
-
+            if (ticket == null || ticket.Status == "Purchased") 
+            {
+                return false;
+            }
+            
             _unitOfWork.Tickets.Remove(ticket);
             await _unitOfWork.CompleteAsync();
             return true;
