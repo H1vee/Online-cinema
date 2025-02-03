@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Cinema.Infrastructure.Repositories.Interfaces
 {
-    public interface IShowetimeRepository:IRepository<Showtime,int>
+    public interface IShowtimeRepository:IRepository<Showtime,int>
     {
         Task<IEnumerable<Showtime>>GetUpcomingShowtimes();
     }
