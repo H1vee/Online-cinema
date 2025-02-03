@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Cinema.Infrastructure.Repositories
 {
-    public class ShowtimeRepository:Repository<Showtime,int>, IShowetimeRepository
+    public class ShowtimeRepository:Repository<Showtime,int>, IShowtimeRepository
     {
         public ShowtimeRepository(ApplicationDbContext context) : base(context){ }
 
