@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Cinema.Core.DTOs
 {
     public class UserDTO
