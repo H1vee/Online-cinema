@@ -13,15 +13,16 @@ namespace Cinema.Infrastructure.UnitOfWork
     public IMovieRepository Movies { get; }
     public ITicketRepository Tickets { get; }
     public ISaleRepository Sales { get; }
-
+    public IShowtimeRepository Showtimes { get; }
     public UnitOfWork(ApplicationDbContext context, IUserRepository users, IMovieRepository movies,
-      ITicketRepository tickets, ISaleRepository sales)
+      ITicketRepository tickets, ISaleRepository sales, IShowtimeRepository showtimes)
     {
       _context = context;
       Users = users;
       Movies = movies;
       Tickets = tickets;
       Sales = sales;
+      Showtimes = showtimes;
     }
     
     public async Task<int> CompleteAsync()
