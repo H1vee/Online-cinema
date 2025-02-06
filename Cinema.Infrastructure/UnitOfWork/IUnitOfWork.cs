@@ -10,6 +10,7 @@ namespace Cinema.Infrastructure.UnitOfWork
       IMovieRepository Movies { get; }
       ITicketRepository Tickets { get; }
       ISaleRepository Sales { get; }
+      IShowtimeRepository Showtimes { get; }
       
       Task<int> CompleteAsync(); // SaveChanges()
    } 
