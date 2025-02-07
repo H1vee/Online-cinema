@@ -2,6 +2,12 @@ using Cinema.Infrastructure.Data;
 using Cinema.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Cinema.Core.Mapping;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using FluentValidation.AspNetCore;
+using Cinema.Core.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +19,11 @@ builder.Services.AddAutoMapper(typeof(CinemaProfile));
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddControllers()
+    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<TicketDTOValidator>());
 
 var app = builder.Build();
 

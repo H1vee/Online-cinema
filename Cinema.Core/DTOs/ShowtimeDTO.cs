@@ -1,3 +1,5 @@
+using System;
+
 namespace Cinema.Core.DTOs
 {
     public class ShowtimeDTO
