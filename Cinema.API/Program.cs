@@ -1,4 +1,5 @@
 using Cinema.Infrastructure.Data;
+using Cinema.Infrastructure.Helpers;
 using Cinema.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Cinema.Core.Mapping;
@@ -21,10 +22,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 builder.Services.AddControllers()
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<TicketDTOValidator>());
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SaleDTOValidator>());
+    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<TicketDTOValidator>())
+    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SaleDTOValidator>())
+    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UserDTOValidator>())
+    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateUserDTOValidator>());
 
 var app = builder.Build();
 

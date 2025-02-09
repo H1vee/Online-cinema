@@ -1,4 +1,5 @@
 using AutoMapper;
+using Cinema.Infrastructure.Helpers;
 using Cinema.Core.DTOs;
 using Cinema.Core.Interfaces;
 using Cinema.Infrastructure.Entities;
@@ -12,10 +13,12 @@ namespace Cinema.Core.Services
    {
        private readonly IUnitOfWork _unitOfWork;
        private readonly IMapper _mapper;
-       public UserService(IUnitOfWork unitOfWork, IMapper mapper)
+       private readonly IPasswordHasher _passwordHasher;
+       public UserService(IUnitOfWork unitOfWork, IMapper mapper, IPasswordHasher passwordHasher)
        {
            _unitOfWork = unitOfWork;
            _mapper = mapper;
+           _passwordHasher = passwordHasher;
        }
 
        public async Task<IEnumerable<UserDTO>> GetAllUsersAsync()
@@ -30,9 +33,11 @@ namespace Cinema.Core.Services
            return user == null ? null : _mapper.Map<UserDTO>(user);
        }
 
-       public async Task AddUserAsync(UserDTO userDto)
+       public async Task AddUserAsync(CreateUserDTO createUserDto)
        {
-           var user = _mapper.Map<User>(userDto);
+            var hashedPassword = _passwordHasher.HashPassword(createUserDto.Password);
+           var user = _mapper.Map<User>(createUserDto);
+           user.PasswordHash = hashedPassword;
            await _unitOfWork.Users.AddAsync(user);
            await _unitOfWork.CompleteAsync();
        }

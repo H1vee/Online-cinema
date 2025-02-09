@@ -8,7 +8,7 @@ namespace Cinema.Core.Interfaces
    {
        Task<IEnumerable<UserDTO>> GetAllUsersAsync();
        Task<UserDTO?>GetUserByIdAsync(int id);
-       Task AddUserAsync(UserDTO userDto);
+       Task AddUserAsync(CreateUserDTO createUserDto);
        Task<bool> DeleteUserAsync(int id);
    } 
 }
