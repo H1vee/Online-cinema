@@ -23,7 +23,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddControllers()
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<TicketDTOValidator>());
+    .AddFluentValidation(fv => 
+            fv.RegisterValidatorsFromAssemblyContaining<TicketDTOValidator>()
+              .RegisterValidatorsFromAssemblyContaining<ShowtimeDTOValidator>());
 
 var app = builder.Build();
 
