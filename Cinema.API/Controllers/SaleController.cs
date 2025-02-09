@@ -18,7 +18,7 @@ public class SaleController : ControllerBase
     }
 
     /// <summary>
-    /// Отримати всі продажі
+    /// ГЋГІГ°ГЁГ¬Г ГІГЁ ГўГ±Ві ГЇГ°Г®Г¤Г Г¦Ві
     /// </summary>
     [HttpGet]
     public async Task<IActionResult> GetAllSales()
@@ -28,7 +28,7 @@ public class SaleController : ControllerBase
     }
 
     /// <summary>
-    /// Отримати продаж за ID
+    /// ГЋГІГ°ГЁГ¬Г ГІГЁ ГЇГ°Г®Г¤Г Г¦ Г§Г  ID
     /// </summary>
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSaleById(int id)
@@ -39,7 +39,7 @@ public class SaleController : ControllerBase
     }
 
     /// <summary>
-    /// Створити нову продажу
+    /// Г‘ГІГўГ®Г°ГЁГІГЁ Г­Г®ГўГі ГЇГ°Г®Г¤Г Г¦Гі
     /// </summary>
     [HttpPost]
     public async Task<IActionResult> CreateSale([FromBody] SaleDTO saleDto)
@@ -51,8 +51,17 @@ public class SaleController : ControllerBase
         return Ok("Sale created successfully");
     }
 
+ /// <summary>
+    /// РћС‚СЂРёРјР°С‚Рё РІСЃС– РїСЂРѕРґР°Р¶С– РєРѕСЂРёСЃС‚СѓРІР°С‡Р° Р·Р° UserID
+    /// </summary>
+    [HttpGet("user/{userId}")]
+    public async Task<IActionResult> GetSalesByUserId(int userId)
+    {
+        var sales = await _saleService.GetSalesByUserIdAsync(userId);
+        return Ok(sales);
+    }
     /// <summary>
-    /// Видалити продажу за ID
+    /// Г‚ГЁГ¤Г Г«ГЁГІГЁ ГЇГ°Г®Г¤Г Г¦Гі Г§Г  ID
     /// </summary>
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSale(int id)
