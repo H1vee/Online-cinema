@@ -16,14 +16,18 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddAutoMapper(typeof(CinemaProfile));
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddFluentValidation(fv =>
+    {
+        fv.RegisterValidatorsFromAssemblyContaining<TicketDTOValidator>();
+        fv.RegisterValidatorsFromAssemblyContaining<ShowtimeDTOValidator>();
+        fv.RegisterValidatorsFromAssemblyContaining<MovieDTOValidator>();
+    });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-builder.Services.AddControllers()
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<TicketDTOValidator>());
 
 var app = builder.Build();
 
@@ -38,7 +42,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 
 app.UseAuthorization();
 app.MapControllers();
