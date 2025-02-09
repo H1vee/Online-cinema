@@ -24,6 +24,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddControllers()
     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<TicketDTOValidator>());
+    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SaleDTOValidator>());
 
 var app = builder.Build();
 
