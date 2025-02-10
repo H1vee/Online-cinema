@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Cinema.Infrastructure.Repositories.Interfaces;
+using Cinema.Infrastructure.Data;
 
 namespace Cinema.Infrastructure.UnitOfWork
 {
@@ -11,7 +12,7 @@ namespace Cinema.Infrastructure.UnitOfWork
       ITicketRepository Tickets { get; }
       ISaleRepository Sales { get; }
       IShowtimeRepository Showtimes { get; }
-      
+      ApplicationDbContext Context { get; }
       Task<int> CompleteAsync(); // SaveChanges()
    } 
 }

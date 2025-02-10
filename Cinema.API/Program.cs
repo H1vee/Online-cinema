@@ -1,8 +1,12 @@
 using Cinema.Infrastructure.Data;
+using Cinema.Infrastructure.Repositories;
+using Cinema.Infrastructure.Repositories.Interfaces;
 using Cinema.Infrastructure.Helpers;
 using Cinema.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Cinema.Core.Mapping;
+using Cinema.Core.Services;
+using Cinema.Core.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,13 +27,23 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<ISaleRepository, SaleRepository>();
+builder.Services.AddScoped<IShowtimeRepository, ShowtimeRepository>();
+builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 
 builder.Services.AddControllers()
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<TicketDTOValidator>())
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SaleDTOValidator>())
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UserDTOValidator>())
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateUserDTOValidator>());
-
+    .AddFluentValidation(fv =>
+    {
+        fv.RegisterValidatorsFromAssemblyContaining<TicketDTOValidator>();
+        fv.RegisterValidatorsFromAssemblyContaining<SaleDTOValidator>();
+        fv.RegisterValidatorsFromAssemblyContaining<UserDTOValidator>();
+        fv.RegisterValidatorsFromAssemblyContaining<CreateUserDTOValidator>();
+    });
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())

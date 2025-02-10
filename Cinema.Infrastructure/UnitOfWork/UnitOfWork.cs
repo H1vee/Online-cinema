@@ -8,12 +8,13 @@ namespace Cinema.Infrastructure.UnitOfWork
   public class UnitOfWork:IUnitOfWork
   {
     private readonly ApplicationDbContext _context;
-    
     public IUserRepository Users { get; }
     public IMovieRepository Movies { get; }
     public ITicketRepository Tickets { get; }
     public ISaleRepository Sales { get; }
     public IShowtimeRepository Showtimes { get; }
+
+    public ApplicationDbContext Context => _context;
     public UnitOfWork(ApplicationDbContext context, IUserRepository users, IMovieRepository movies,
       ITicketRepository tickets, ISaleRepository sales, IShowtimeRepository showtimes)
     {

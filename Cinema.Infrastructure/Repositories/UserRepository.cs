@@ -21,6 +21,15 @@ namespace Cinema.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return user;
         }
+
+        public async Task<User?> GetByIdAsync(int id)
+        {
+            return await _context.Users
+                .Include(u => u.UserRoleAssignments)
+                .ThenInclude(ura => ura.UserRole) 
+                .FirstOrDefaultAsync(u => u.UserID == id);
+        }
+
     }
 }
 

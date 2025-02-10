@@ -1,39 +1,31 @@
 using System.Security.Cryptography;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System.Text;
 
 namespace Cinema.Infrastructure.Helpers
 {
     public class PasswordHasher : IPasswordHasher
     {
-        public string HashPassword(string password, out string saltBase64)
+        public string HashPassword(string password, out string salt)
         {
-            byte[] salt = new byte[16];
-            using (var rng = RandomNumberGenerator.Create())
+            using (var rng = new RNGCryptoServiceProvider())
             {
-                rng.GetBytes(salt);
+                byte[] saltBytes = new byte[16];
+                rng.GetBytes(saltBytes);
+                salt = Convert.ToBase64String(saltBytes);
             }
 
-            saltBase64 = Convert.ToBase64String(salt);
-            
-            return Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: password,
-                salt: salt,
-                prf: KeyDerivationPrf.HMACSHA256,
-                iterationCount: 10000,
-                numBytesRequested: 256 / 8));
+            using (var sha256 = SHA256.Create())
+            {
+                byte[] saltedPassword = Encoding.UTF8.GetBytes(password + salt);
+                byte[] hashBytes = sha256.ComputeHash(saltedPassword);
+                return Convert.ToBase64String(hashBytes);
+            }
         }
 
-        public bool VerifyPassword(string password, string saltBase64, string hashBase64)
+        public bool VerifyPassword(string password, string hashedPassword, string salt)
         {
-            byte[] salt = Convert.FromBase64String(saltBase64);
-            string newHash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: password,
-                salt: salt,
-                prf: KeyDerivationPrf.HMACSHA256,
-                iterationCount: 10000,
-                numBytesRequested: 256 / 8));
-            
-            return newHash == hashBase64;
+            string hashedInput = HashPassword(password, out _);
+            return hashedPassword == hashedInput;
         }
     }
 }
