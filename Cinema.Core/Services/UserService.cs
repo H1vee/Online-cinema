@@ -33,14 +33,41 @@ namespace Cinema.Core.Services
            return user == null ? null : _mapper.Map<UserDTO>(user);
        }
 
-       public async Task AddUserAsync(CreateUserDTO createUserDto)
-       {
-            var hashedPassword = _passwordHasher.HashPassword(createUserDto.Password);
-           var user = _mapper.Map<User>(createUserDto);
-           user.PasswordHash = hashedPassword;
-           await _unitOfWork.Users.AddAsync(user);
-           await _unitOfWork.CompleteAsync();
-       }
+       public async Task<UserDTO> AddUserAsync(CreateUserDTO createUserDto)
+    {
+        string salt;
+        var hashedPassword = _passwordHasher.HashPassword(createUserDto.Password, out salt);
+        
+        var user = new User
+        {
+            Email = createUserDto.Email,
+            PasswordHash = hashedPassword,
+            Salt = salt,
+            UserRoleAssignments = new List<UserRoleAssignment>()
+        };
+
+        var defaultRole = await _roleRepository.GetRoleByNameAsync("User");
+        if (defaultRole == null)
+        {
+            throw new Exception("Default role 'User' not found");
+        }
+        
+        user.UserRoleAssignments.Add(new UserRoleAssignment
+        {
+            UserId = user.UserID,
+            RoleId = defaultRole.RoleID,
+        });
+
+        await _userRepository.CreateUserAsync(user);
+        await _unitOfWork.CompleteAsync();
+
+        return new UserDTO
+        {
+            Id = user.Id,
+            Email = user.Email,
+            Roles = new List<string> { defaultRole.RoleName }
+        };
+    }
 
        public async Task<bool> DeleteUserAsync(int id)
        {

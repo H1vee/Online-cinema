@@ -23,7 +23,16 @@ public class User
 
     public DateTime RegistrationDate { get; set; } = DateTime.Now;
 
+    [Required]
+    [MaxLength(255)]
+    public string Salt { get; set; }
+
     public ICollection<UserRoleAssignment> UserRoleAssignments { get; set; }
+
+    public User()
+    {
+        UserRoleAssignments = new List<UserRoleAssignment>();
+    }
 }    
 }
 
