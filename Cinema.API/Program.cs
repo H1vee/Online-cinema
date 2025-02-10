@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using Cinema.Core.Validators;
 
@@ -17,18 +18,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddAutoMapper(typeof(CinemaProfile));
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 builder.Services.AddControllers()
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<TicketDTOValidator>())
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SaleDTOValidator>())
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UserDTOValidator>())
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateUserDTOValidator>());
+    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<TicketDTOValidator>());
+
+builder.Services.AddValidatorsFromAssemblyContaining<SaleDTOValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UserDTOValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUserDTOValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<ShowtimeDTOValidator>();
+
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -43,7 +46,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 
 app.UseAuthorization();
 app.MapControllers();
