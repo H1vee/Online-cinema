@@ -41,6 +41,12 @@ namespace Cinema.Core.Mapping
                 .ForMember(dest => dest.RegistrationDate, opt => opt.Ignore())
                 .ForMember(dest => dest.UserRoleAssignments, opt => opt.Ignore());
 
+            CreateMap<CreateUserDTO, User>()
+                .ForMember(dest => dest.UserID, opt => opt.Ignore())
+                .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
+                .ForMember(dest => dest.RegistrationDate, opt => opt.Ignore())
+                .ForMember(dest => dest.UserRoleAssignments, opt => opt.Ignore());
+
             CreateMap<Showtime, ShowtimeDTO>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ShowtimeID))
                 .ForMember(dest => dest.MovieTitle, opt => opt.MapFrom(src => src.Movie.Title))

@@ -43,5 +43,14 @@ namespace Cinema.Infrastructure.Data
                .HasForeignKey(t => t.SaleID)
                .OnDelete(DeleteBehavior.SetNull);
        }
+
+       protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=cinema;Username=mariia;Password=maha8520");
+            }
+        }
+
     }
 }
