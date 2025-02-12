@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Cinema.Infrastructure.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Infrastructure.Data
 {
