@@ -37,9 +37,24 @@ namespace Cinema.Core.Services
             return _mapper.Map<IEnumerable<ShowtimeDTO>>(showtimes);
         }
 
-        public async Task AddShowtimeAsync(ShowtimeDTO showtimeDto)
+
+
+        public async Task AddShowtimeAsync(CreateShowtimeDTO showtimeDto)
         {
-            var showtime = _mapper.Map<Showtime>(showtimeDto);
+            
+            var movieExists = await _unitOfWork.Movies.GetByIdAsync(showtimeDto.MovieId);
+            if (movieExists == null)
+            {
+                throw new Exception($"Movie with ID {showtimeDto.MovieId} does not exist.");
+            }
+
+            var showtime = new Showtime
+            {
+                MovieID = showtimeDto.MovieId,
+                ShowDateTime = showtimeDto.ShowDateTime,
+                HallID = showtimeDto.HallId
+            };
+
             await _unitOfWork.Showtimes.AddAsync(showtime);
             await _unitOfWork.CompleteAsync();
         }
