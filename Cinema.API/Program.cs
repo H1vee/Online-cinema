@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using Cinema.Core.Validators;
 
@@ -21,6 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 builder.Services.AddAutoMapper(typeof(CinemaProfile));
 
@@ -31,6 +33,7 @@ builder.Services.AddControllers()
         fv.RegisterValidatorsFromAssemblyContaining<SaleDTOValidator>();
         fv.RegisterValidatorsFromAssemblyContaining<UserDTOValidator>();
         fv.RegisterValidatorsFromAssemblyContaining<CreateUserDTOValidator>();
+        fv.RegisterValidatorsFromAssemblyContaining<ShowtimeValidator>(); 
     });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -38,15 +41,21 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ISaleRepository, SaleRepository>();
 builder.Services.AddScoped<IShowtimeRepository, ShowtimeRepository>();
+
+
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IShowtimeService, ShowtimeService>(); 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISaleService, SaleService>();
+
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
@@ -96,6 +105,7 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -110,5 +120,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 app.Run();

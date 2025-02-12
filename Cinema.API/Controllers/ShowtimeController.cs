@@ -10,11 +10,13 @@ public class ShowtimeController : ControllerBase
 {
     private readonly IShowtimeService _showtimeService;
     private readonly IValidator<ShowtimeDTO> _validator;
+    private readonly IValidator<CreateShowtimeDTO> _validatorCreate;
 
-    public ShowtimeController(IShowtimeService showtimeService, IValidator<ShowtimeDTO> validator)
+    public ShowtimeController(IShowtimeService showtimeService, IValidator<ShowtimeDTO> validator,IValidator<CreateShowtimeDTO> validatorCreate )
     {
         _showtimeService = showtimeService;
         _validator = validator;
+        _validatorCreate = validatorCreate;
     }
 
     [HttpGet]
@@ -40,9 +42,9 @@ public class ShowtimeController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateShowtime([FromBody] ShowtimeDTO showtimeDto)
+    public async Task<IActionResult> CreateShowtime([FromBody] CreateShowtimeDTO showtimeDto)
     {
-        var validationResult = await _validator.ValidateAsync(showtimeDto);
+        var validationResult = await _validatorCreate.ValidateAsync(showtimeDto);
         if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
 
         await _showtimeService.AddShowtimeAsync(showtimeDto);

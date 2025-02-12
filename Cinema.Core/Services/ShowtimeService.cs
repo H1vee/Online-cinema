@@ -22,13 +22,39 @@ namespace Cinema.Core.Services
         public async Task<IEnumerable<ShowtimeDTO>> GetAllShowtimesAsync()
         {
             var showtimes = await _unitOfWork.Showtimes.GetAllAsync();
-            return _mapper.Map<IEnumerable<ShowtimeDTO>>(showtimes);
+            var showtimeDtos = new List<ShowtimeDTO>();
+            foreach (var showtime in showtimes)
+            {
+                var movie = await _unitOfWork.Movies.GetByIdAsync(showtime.MovieID);
+                var hall = await _unitOfWork.Halls.GetByIdAsync(showtime.HallID);
+
+                showtimeDtos.Add(new ShowtimeDTO
+                {
+                    Id = showtime.ShowtimeID,
+                    MovieTitle = movie?.Title ?? "Unknown Movie",
+                    ShowDateTime = showtime.ShowDateTime,
+                    HallName = hall?.Name ?? "Unknown Hall"
+                });
+            }
+            
+            return showtimeDtos;
         }
 
         public async Task<ShowtimeDTO?> GetShowtimeByIdAsync(int id)
         {
             var showtime = await _unitOfWork.Showtimes.GetByIdAsync(id);
-            return showtime == null ? null : _mapper.Map<ShowtimeDTO>(showtime);
+            if (showtime == null) return null;
+
+            var movie = await _unitOfWork.Movies.GetByIdAsync(showtime.MovieID);
+            var hall = await _unitOfWork.Halls.GetByIdAsync(showtime.HallID);
+
+            return new ShowtimeDTO
+            {
+                Id = showtime.ShowtimeID,
+                MovieTitle = movie?.Title ?? "Unknown Movie",
+                ShowDateTime = showtime.ShowDateTime,
+                HallName = hall?.Name ?? "Unknown Hall"
+            };
         }
 
         public async Task<IEnumerable<ShowtimeDTO>> GetUpcomingShowtimesAsync()
@@ -37,9 +63,24 @@ namespace Cinema.Core.Services
             return _mapper.Map<IEnumerable<ShowtimeDTO>>(showtimes);
         }
 
-        public async Task AddShowtimeAsync(ShowtimeDTO showtimeDto)
+
+
+        public async Task AddShowtimeAsync(CreateShowtimeDTO showtimeDto)
         {
-            var showtime = _mapper.Map<Showtime>(showtimeDto);
+            
+            var movieExists = await _unitOfWork.Movies.GetByIdAsync(showtimeDto.MovieId);
+            if (movieExists == null)
+            {
+                throw new Exception($"Movie with ID {showtimeDto.MovieId} does not exist.");
+            }
+
+            var showtime = new Showtime
+            {
+                MovieID = showtimeDto.MovieId,
+                ShowDateTime = showtimeDto.ShowDateTime,
+                HallID = showtimeDto.HallId
+            };
+
             await _unitOfWork.Showtimes.AddAsync(showtime);
             await _unitOfWork.CompleteAsync();
         }

@@ -9,7 +9,7 @@ namespace Cinema.Core.Interfaces
         Task<IEnumerable<ShowtimeDTO>> GetAllShowtimesAsync();
         Task<ShowtimeDTO?> GetShowtimeByIdAsync(int id);
         Task<IEnumerable<ShowtimeDTO>> GetUpcomingShowtimesAsync();
-        Task AddShowtimeAsync(ShowtimeDTO showtimeDto);
+        Task AddShowtimeAsync(CreateShowtimeDTO showtimeDto);
         Task<bool> DeleteShowtimeAsync(int id);
     }
 }
