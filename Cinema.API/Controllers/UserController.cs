@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Cinema.Core.DTOs;
 using Cinema.Core.Interfaces;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.API.Controllers
@@ -43,7 +44,7 @@ namespace Cinema.API.Controllers
         }
 
         /// <summary>
-        /// Створити нового користувача
+        /// Створити нового користувача (доступно лише для адміністраторів)
         /// </summary>
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserDTO createUserDto)
