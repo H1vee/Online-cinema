@@ -22,13 +22,34 @@ namespace Cinema.Core.Services
         public async Task<IEnumerable<TicketDTO>> GetAllTicketsAsync()
         {
             var tickets = await _unitOfWork.Tickets.GetAllAsync();
-            return _mapper.Map<IEnumerable<TicketDTO>>(tickets);
+            return tickets.Select(t => new TicketDTO
+            {
+                Id = t.TicketID,
+                MovieTitle = t.Showtime?.Movie?.Title ?? "Unknown",
+                ShowDateTime = t.Showtime?.ShowDateTime ?? DateTime.MinValue,
+                RowNumber = t.Seat?.RowNumber ?? 0,
+                SeatNumber = t.Seat?.SeatNumber ?? 0,
+                FinalPrice = t.FinalPrice,
+                Status = t.Status
+            }).ToList();
         }
+
 
         public async Task<TicketDTO?> GetTicketByIdAsync(int id)
         {
             var ticket = await _unitOfWork.Tickets.GetByIdAsync(id);
-            return ticket == null ? null : _mapper.Map<TicketDTO>(ticket);
+            if (ticket == null) return null;
+
+            return new TicketDTO
+            {
+                Id = ticket.TicketID,
+                MovieTitle = ticket.Showtime?.Movie?.Title ?? "Unknown",
+                ShowDateTime = ticket.Showtime?.ShowDateTime ?? DateTime.MinValue,
+                RowNumber = ticket.Seat?.RowNumber ?? 0,
+                SeatNumber = ticket.Seat?.SeatNumber ?? 0,
+                FinalPrice = ticket.FinalPrice,
+                Status = ticket.Status
+            };
         }
 
         public async Task AddTicketAsync(CreateTicketDTO ticketDto)
