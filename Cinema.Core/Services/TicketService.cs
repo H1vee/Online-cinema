@@ -31,9 +31,22 @@ namespace Cinema.Core.Services
             return ticket == null ? null : _mapper.Map<TicketDTO>(ticket);
         }
 
-        public async Task AddTicketAsync(TicketDTO ticketDto)
+        public async Task AddTicketAsync(CrateTicketDTO ticketDto)
         {
-            var ticket = _mapper.Map<Ticket>(ticketDto);
+            var movieExists = await _unitOfWork.Movies.GetByIdAsync(showtimeDto.MovieId);
+            if (movieExists == null)
+            {
+                throw new Exception($"Movie with ID {ticketDto.MovieId} does not exist.");
+            }
+            var ticket = new Ticket
+            {
+                MovieID = ticketDto.MovieId,
+                ShowDateTime = ticketDto.ShowDateTime,
+                RowNumber = ticketDTO.RowNumber,
+                SeatNumber = ticketDTO.SeatNumber,
+                FinalPrice = ticketDTO.FinalPrice,
+                Status = ticketDTO.Status
+            };
             await _unitOfWork.Tickets.AddAsync(ticket);
             await _unitOfWork.CompleteAsync();
         }
