@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using System;
 
 namespace Cinema.Infrastructure.Helpers
 {
@@ -24,8 +25,14 @@ namespace Cinema.Infrastructure.Helpers
 
         public bool VerifyPassword(string password, string hashedPassword, string salt)
         {
-            string hashedInput = HashPassword(password, out _);
-            return hashedPassword == hashedInput;
+            using (var sha256 = SHA256.Create())
+            {
+                byte[] saltedPassword = Encoding.UTF8.GetBytes(password + salt);
+                byte[] hashBytes = sha256.ComputeHash(saltedPassword);
+                string hashedInput = Convert.ToBase64String(hashBytes);
+
+                return hashedPassword == hashedInput;
+            }
         }
     }
 }
