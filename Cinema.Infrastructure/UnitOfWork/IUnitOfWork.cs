@@ -14,6 +14,8 @@ namespace Cinema.Infrastructure.UnitOfWork
       IShowtimeRepository Showtimes { get; }
       ApplicationDbContext Context { get; }
       IHallRepository Halls { get; }
+      ISeatRepository Seats { get; }
+      IPricingRuleRepository PricingRules { get; }
       Task<int> CompleteAsync(); // SaveChanges()
    } 
 }

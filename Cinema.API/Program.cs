@@ -34,7 +34,9 @@ builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ISaleRepository, SaleRepository>();
 builder.Services.AddScoped<IShowtimeRepository, ShowtimeRepository>();
-
+builder.Services.AddScoped<IHallRepository, HallRepository>();
+builder.Services.AddScoped<ISeatRepository, SeatRepository>();
+builder.Services.AddScoped<IPricingRuleRepository, PricingRuleRepository>();
 
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -48,6 +50,8 @@ builder.Services.AddValidatorsFromAssemblyContaining<SaleDTOValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UserDTOValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserDTOValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<ShowtimeValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateTicketDTOValidator>();
+
 
 // 🔹 Swagger для API
 builder.Services.AddEndpointsApiExplorer();

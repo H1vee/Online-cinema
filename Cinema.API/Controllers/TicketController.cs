@@ -10,11 +10,12 @@ public class TicketController : ControllerBase
 {
     private readonly ITicketService _ticketService;
     private readonly IValidator<TicketDTO> _validator;
-
-    public TicketController(ITicketService ticketService, IValidator<TicketDTO> validator)
+    private readonly IValidator<CreateTicketDTO> _validatorCreate;
+    public TicketController(ITicketService ticketService, IValidator<TicketDTO> validator, IValidator<CreateTicketDTO> validatorCreate)
     {
         _ticketService = ticketService;
         _validator = validator;
+        _validatorCreate = validatorCreate;
     }
 
     /// <summary>
@@ -52,9 +53,9 @@ public class TicketController : ControllerBase
     /// Створити новий квиток
     /// </summary>
     [HttpPost]
-    public async Task<IActionResult> CreateTicket([FromBody] TicketDTO ticketDto)
+    public async Task<IActionResult> CreateTicket([FromBody] CreateTicketDTO ticketDto)
     {
-        var validationResult = await _validator.ValidateAsync(ticketDto);
+        var validationResult = await _validatorCreate.ValidateAsync(ticketDto);
         if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
 
         await _ticketService.AddTicketAsync(ticketDto);

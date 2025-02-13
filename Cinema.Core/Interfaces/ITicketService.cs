@@ -8,7 +8,7 @@ namespace Cinema.Core.Interfaces
     {
         Task<IEnumerable<TicketDTO>> GetAllTicketsAsync();
         Task<TicketDTO?> GetTicketByIdAsync(int id);
-        Task AddTicketAsync(TicketDTO ticketDto);
+        Task AddTicketAsync(CreateTicketDTO ticketDto);
         Task<bool> DeleteTicketAsync(int id);
         Task<IEnumerable<TicketDTO>> GetTicketsBySaleIdAsync(int saleId);
     }
