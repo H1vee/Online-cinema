@@ -99,7 +99,16 @@ namespace Cinema.Core.Services
         public async Task<IEnumerable<TicketDTO>> GetTicketsBySaleIdAsync(int saleId)
         {
             var tickets = await _unitOfWork.Tickets.GetTicketsBySaleId(saleId);
-            return _mapper.Map<IEnumerable<TicketDTO>>(tickets);
+            return tickets.Select(t => new TicketDTO
+            {
+                Id = t.TicketID,
+                MovieTitle = t.Showtime?.Movie?.Title ?? "Unknown",
+                ShowDateTime = t.Showtime?.ShowDateTime ?? DateTime.MinValue,
+                RowNumber = t.Seat?.RowNumber ?? 0,
+                SeatNumber = t.Seat?.SeatNumber ?? 0,
+                FinalPrice = t.FinalPrice,
+                Status = t.Status
+            }).ToList();
         }
     }
 }
