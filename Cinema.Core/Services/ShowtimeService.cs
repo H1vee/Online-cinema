@@ -33,6 +33,7 @@ namespace Cinema.Core.Services
                     Id = showtime.ShowtimeID,
                     MovieTitle = movie?.Title ?? "Unknown Movie",
                     ShowDateTime = showtime.ShowDateTime,
+                    StartTime = showtime.StartTime,
                     HallName = hall?.Name ?? "Unknown Hall"
                 });
             }
@@ -53,6 +54,7 @@ namespace Cinema.Core.Services
                 Id = showtime.ShowtimeID,
                 MovieTitle = movie?.Title ?? "Unknown Movie",
                 ShowDateTime = showtime.ShowDateTime,
+                StartTime = showtime.StartTime,
                 HallName = hall?.Name ?? "Unknown Hall"
             };
         }
