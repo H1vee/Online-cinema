@@ -13,12 +13,12 @@ namespace Cinema.Infrastructure.UnitOfWork
       ISaleRepository Sales { get; }
       IShowtimeRepository Showtimes { get; }
       ApplicationDbContext Context { get; }
-      Update-Showtime
       IHallRepository Halls { get; }
       ISeatRepository Seats { get; }
+      IActorRepository Actors { get; } 
+      IGenreRepository Genres { get; }
       IPricingRuleRepository PricingRules { get; }
       Task<int> CompleteAsync(); // SaveChanges()
-
    } 
 }
 
