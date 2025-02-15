@@ -14,9 +14,13 @@ namespace Cinema.Infrastructure.UnitOfWork
     public ISaleRepository Sales { get; }
     public IShowtimeRepository Showtimes { get; }
 
+    public IHallRepository Halls { get; }
+    public ISeatRepository Seats { get; }
+    public IPricingRuleRepository PricingRules { get; }
+    
     public ApplicationDbContext Context => _context;
     public UnitOfWork(ApplicationDbContext context, IUserRepository users, IMovieRepository movies,
-      ITicketRepository tickets, ISaleRepository sales, IShowtimeRepository showtimes)
+      ITicketRepository tickets, ISaleRepository sales, IShowtimeRepository showtimes, IHallRepository halls, ISeatRepository seats, IPricingRuleRepository pricingRules)
     {
       _context = context;
       Users = users;
@@ -24,6 +28,10 @@ namespace Cinema.Infrastructure.UnitOfWork
       Tickets = tickets;
       Sales = sales;
       Showtimes = showtimes;
+      Halls = halls;
+      Seats = seats;
+      PricingRules = pricingRules;
+      
     }
     
     public async Task<int> CompleteAsync()

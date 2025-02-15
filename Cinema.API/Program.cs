@@ -20,13 +20,10 @@ using Cinema.Core.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
 builder.Services.AddAutoMapper(typeof(CinemaProfile));
-
 
 builder.Services.AddControllers()
     .AddFluentValidation(fv =>
@@ -35,13 +32,13 @@ builder.Services.AddControllers()
         fv.RegisterValidatorsFromAssemblyContaining<SaleDTOValidator>();
         fv.RegisterValidatorsFromAssemblyContaining<UserDTOValidator>();
         fv.RegisterValidatorsFromAssemblyContaining<CreateUserDTOValidator>();
-        fv.RegisterValidatorsFromAssemblyContaining<ShowtimeValidator>(); 
+        fv.RegisterValidatorsFromAssemblyContaining<ShowtimeValidator>();
+        fv.RegisterValidatorsFromAssemblyContaining<CreateTicketDTOValidator>();
     });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Регистрация сервисов
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
@@ -50,13 +47,14 @@ builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ISaleRepository, SaleRepository>();
 builder.Services.AddScoped<IShowtimeRepository, ShowtimeRepository>();
-
+builder.Services.AddScoped<IHallRepository, HallRepository>();
+builder.Services.AddScoped<ISeatRepository, SeatRepository>();
+builder.Services.AddScoped<IPricingRuleRepository, PricingRuleRepository>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IShowtimeService, ShowtimeService>(); 
+builder.Services.AddScoped<IShowtimeService, ShowtimeService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISaleService, SaleService>();
-
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
@@ -77,7 +75,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAuthorization();
-
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -121,5 +118,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 app.Run();
