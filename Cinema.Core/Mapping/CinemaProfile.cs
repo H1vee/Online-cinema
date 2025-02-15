@@ -66,6 +66,19 @@ namespace Cinema.Core.Mapping
                 .ForMember(dest => dest.SaleID, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.UserID, opt => opt.Ignore())
                 .ForMember(dest => dest.Tickets, opt => opt.MapFrom(src => src.Tickets));
+            
+            
+            CreateMap<Actor, ActorDTO>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ActorID))
+                .ForMember(dest => dest.Movies, opt => opt.MapFrom(src => src.MovieActors.Select(ma => ma.Movie.Title).ToList()));
+
+            CreateMap<CreateActorDTO, Actor>();
+
+            CreateMap<Genre, GenreDTO>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.GenreID))
+                .ForMember(dest => dest.Movies, opt => opt.MapFrom(src => src.MovieGenres.Select(mg => mg.Movie.Title).ToList()));
+
+            CreateMap<CreateGenreDTO, Genre>();
 
         }
     }

@@ -33,7 +33,10 @@ builder.Services.AddControllers()
         fv.RegisterValidatorsFromAssemblyContaining<UserDTOValidator>();
         fv.RegisterValidatorsFromAssemblyContaining<CreateUserDTOValidator>();
         fv.RegisterValidatorsFromAssemblyContaining<ShowtimeValidator>();
+        fv.RegisterValidatorsFromAssemblyContaining<CreateShowtimeDTOValidator>();
         fv.RegisterValidatorsFromAssemblyContaining<CreateTicketDTOValidator>();
+        fv.RegisterValidatorsFromAssemblyContaining<CreateActorDTOValidator>();
+        fv.RegisterValidatorsFromAssemblyContaining<CreateGenreDTOValidator>();
     });
 
 builder.Services.AddEndpointsApiExplorer();
