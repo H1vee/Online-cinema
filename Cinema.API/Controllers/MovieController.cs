@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 public class MovieController : ControllerBase
 {
     private readonly IMovieService _movieService;
-    private readonly IValidator<MovieDTO> _validator;
+    private readonly IValidator<CreateMovieDTO> _validator;
 
-    public MovieController(IMovieService movieService, IValidator<MovieDTO> validator)
+    public MovieController(IMovieService movieService, IValidator<CreateMovieDTO> validator)
     {
         _movieService = movieService;
         _validator = validator;
@@ -43,7 +43,7 @@ public class MovieController : ControllerBase
     /// Додати новий фільм
     /// </summary>
     [HttpPost]
-    public async Task<IActionResult> CreateMovie([FromBody] MovieDTO movieDto)
+    public async Task<IActionResult> CreateMovie([FromBody] CreateMovieDTO movieDto)
     {
         var validationResult = await _validator.ValidateAsync(movieDto);
         if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
