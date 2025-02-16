@@ -11,10 +11,27 @@ namespace Cinema.Infrastructure.Repositories
     {
         public MovieRepository(ApplicationDbContext context) : base(context){ }
 
+        public async Task<IEnumerable<Movie>> GetAllAsync()
+        {
+            return await _context.Movies
+                .Include(m => m.MovieGenres)
+                .ThenInclude(mg => mg.Genre)
+                .Include(m => m.MovieActors)
+                .ThenInclude(ma => ma.Actor)
+                .ToListAsync();
+        }
+        public async Task<Movie?> GetByIdAsync(int id)
+        {
+            return await _context.Movies
+                .Include(m => m.MovieGenres)
+                .ThenInclude(mg => mg.Genre)
+                .Include(m => m.MovieActors)
+                .ThenInclude(ma => ma.Actor)
+                .FirstOrDefaultAsync(m => m.MovieID == id);
+        }
         public async Task<IEnumerable<Movie>> GetMoviesWithRatingAbove(float rating)
         {
             return await _context.Movies.Where(m => m.Rating > rating).ToListAsync();
         }
     }
 }
-
