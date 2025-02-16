@@ -33,7 +33,10 @@ builder.Services.AddControllers()
         fv.RegisterValidatorsFromAssemblyContaining<UserDTOValidator>();
         fv.RegisterValidatorsFromAssemblyContaining<CreateUserDTOValidator>();
         fv.RegisterValidatorsFromAssemblyContaining<ShowtimeValidator>();
+        fv.RegisterValidatorsFromAssemblyContaining<CreateShowtimeDTOValidator>();
         fv.RegisterValidatorsFromAssemblyContaining<CreateTicketDTOValidator>();
+        fv.RegisterValidatorsFromAssemblyContaining<CreateActorDTOValidator>();
+        fv.RegisterValidatorsFromAssemblyContaining<CreateGenreDTOValidator>();
     });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -54,6 +57,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IShowtimeService, ShowtimeService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISaleService, SaleService>();
+builder.Services.AddScoped<IActorRepository, ActorRepository>(); 
+builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
