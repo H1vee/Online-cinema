@@ -62,4 +62,24 @@ public class MovieController : ControllerBase
         if (!result) return NotFound("Movie not found.");
         return Ok("Movie deleted successfully.");
     }
+
+    /// <summary>
+    /// Отримати актуальні фільми
+    /// </summary>
+    [HttpGet("recent")]
+    public async Task<IActionResult> GetRecentMovies()
+    {
+        var movies = await _movieService.GetRecentMoviesAsync();
+        return Ok(movies);
+    }
+
+    /// <summary>
+    /// Отримати нові фільми 
+    /// </summary>
+    [HttpGet("upcoming")]
+    public async Task<IActionResult> GetUpcomingMovies()
+    {
+        var movies = await _movieService.GetUpcomingMoviesAsync();
+        return Ok(movies);
+    }
 }
