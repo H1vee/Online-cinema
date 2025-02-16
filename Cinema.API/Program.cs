@@ -34,6 +34,7 @@ builder.Services.AddControllers()
         fv.RegisterValidatorsFromAssemblyContaining<CreateUserDTOValidator>();
         fv.RegisterValidatorsFromAssemblyContaining<ShowtimeValidator>();
         fv.RegisterValidatorsFromAssemblyContaining<CreateTicketDTOValidator>();
+        fv.RegisterValidatorsFromAssemblyContaining<CreateMovieDTOValidator>();
     });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -49,12 +50,15 @@ builder.Services.AddScoped<IShowtimeRepository, ShowtimeRepository>();
 builder.Services.AddScoped<IHallRepository, HallRepository>();
 builder.Services.AddScoped<ISeatRepository, SeatRepository>();
 builder.Services.AddScoped<IPricingRuleRepository, PricingRuleRepository>();
+builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IShowtimeService, ShowtimeService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISaleService, SaleService>();
 builder.Services.AddScoped<IActorRepository, ActorRepository>(); 
+builder.Services.AddScoped<IMovieService, MovieService>();
+
 
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");

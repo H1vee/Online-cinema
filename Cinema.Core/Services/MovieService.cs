@@ -68,19 +68,23 @@ namespace Cinema.Core.Services
                 PosterURL = movieDto.PosterURL
             };
 
-            
             var genres = await _unitOfWork.Genres.GetAllAsync();
             var selectedGenres = genres.Where(g => movieDto.GenresIds.Contains(g.GenreID)).ToList();
             movie.MovieGenres = selectedGenres.Select(g => new MovieGenre { GenreID = g.GenreID }).ToList();
 
-            
             var actors = await _unitOfWork.Actors.GetAllAsync();
-            var selectedActors = actors.Where(a => movieDto.ActorsIds.Contains(a.ActorID)).ToList();
-            movie.MovieActors = selectedActors.Select(a => new MovieActor { ActorID = a.ActorID }).ToList();
+            movie.MovieActors = movieDto.Actors
+                .Select(a => new MovieActor
+                {
+                    ActorID = a.ActorID,
+                    RoleID = a.RoleID == 0 ? 1 : a.RoleID
+                })
+                .ToList();
 
             await _unitOfWork.Movies.AddAsync(movie);
             await _unitOfWork.CompleteAsync();
         }
+
 
         public async Task<bool> DeleteMovieAsync(int id)
         {
