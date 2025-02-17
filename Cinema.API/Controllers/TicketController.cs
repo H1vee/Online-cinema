@@ -3,6 +3,7 @@ using Cinema.Core.DTOs;
 using Cinema.Core.Interfaces;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
 [Route("api/tickets")]
@@ -53,6 +54,7 @@ public class TicketController : ControllerBase
     /// Створити новий квиток
     /// </summary>
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> CreateTicket([FromBody] CreateTicketDTO ticketDto)
     {
         var validationResult = await _validatorCreate.ValidateAsync(ticketDto);
@@ -66,6 +68,7 @@ public class TicketController : ControllerBase
     /// Видалити квиток за ID
     /// </summary>
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> DeleteTicket(int id)
     {
         var result = await _ticketService.DeleteTicketAsync(id);

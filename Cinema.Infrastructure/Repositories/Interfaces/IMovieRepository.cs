@@ -8,6 +8,6 @@ namespace Cinema.Infrastructure.Repositories.Interfaces
         Task<IEnumerable<Movie>> GetMoviesWithRatingAbove(float rating);
         Task<IEnumerable<Movie>> GetRecentMoviesAsync();
         Task<IEnumerable<Movie>> GetUpcomingMoviesAsync();
-    
     }
 }
+

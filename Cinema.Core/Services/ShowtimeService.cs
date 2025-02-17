@@ -59,13 +59,31 @@ namespace Cinema.Core.Services
             };
         }
 
-        public async Task<IEnumerable<ShowtimeDTO>> GetUpcomingShowtimesAsync()
+        public async Task<IEnumerable<ShowtimeDTO>> GetShowtimesByDateAsync(DateTime date)
         {
-            var showtimes = await _unitOfWork.Showtimes.GetUpcomingShowtimes(); 
+            var showtimes = await _unitOfWork.Showtimes.GetShowtimesByDate(date);
             return _mapper.Map<IEnumerable<ShowtimeDTO>>(showtimes);
         }
 
+        public async Task<IEnumerable<ShowtimeDTO>> GetShowtimesByGenreAsync(string genreName)
+        {
+            var showtimes = await _unitOfWork.Showtimes.GetShowtimesByGenre(genreName);
+            return _mapper.Map<IEnumerable<ShowtimeDTO>>(showtimes);
+        }
 
+        public async Task<IEnumerable<ShowtimeDTO>> GetShowtimesByDurationAsync(int maxDuration)
+        {
+            var showtimes = await _unitOfWork.Showtimes.GetShowtimesByDurationAsync(maxDuration);
+
+            return showtimes.Select(showtime => new ShowtimeDTO
+            {
+                Id = showtime.ShowtimeID,
+                MovieTitle = showtime.Movie.Title,
+                ShowDateTime = showtime.ShowDateTime,
+                StartTime = showtime.StartTime,
+                HallName = showtime.Hall?.Name ?? "Unknown Hall"
+            }).ToList();
+        }
 
         public async Task AddShowtimeAsync(CreateShowtimeDTO showtimeDto)
         {
@@ -80,7 +98,8 @@ namespace Cinema.Core.Services
             {
                 MovieID = showtimeDto.MovieId,
                 ShowDateTime = showtimeDto.ShowDateTime,
-                HallID = showtimeDto.HallId
+                HallID = showtimeDto.HallId,
+                StartTime = showtimeDto.StartTime
             };
 
             await _unitOfWork.Showtimes.AddAsync(showtime);

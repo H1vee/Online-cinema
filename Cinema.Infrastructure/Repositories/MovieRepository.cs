@@ -33,6 +33,7 @@ namespace Cinema.Infrastructure.Repositories
         {
             return await _context.Movies.Where(m => m.Rating > rating).ToListAsync();
         }
+
         public async Task<IEnumerable<Movie>> GetRecentMoviesAsync()
         {
             var oneYearAgo = DateTime.UtcNow.AddYears(-1);

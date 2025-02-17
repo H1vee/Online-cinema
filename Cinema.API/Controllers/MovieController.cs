@@ -1,6 +1,7 @@
 using Cinema.Core.DTOs;
 using Cinema.Core.Interfaces;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -19,9 +20,10 @@ public class MovieController : ControllerBase
     }
 
     /// <summary>
-    /// Отрмати всі фільми
+    /// Отримати всі фільми
     /// </summary>
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetAllMovies()
     {
         var movies = await _movieService.GetAllMoviesAsync();
@@ -29,9 +31,10 @@ public class MovieController : ControllerBase
     }
 
     /// <summary>
-    /// Отримати фільми за ID
+    /// Отримати фільм за ID
     /// </summary>
     [HttpGet("{id}")]
+    [Authorize]
     public async Task<IActionResult> GetMovieById(int id)
     {
         var movie = await _movieService.GetMovieByIdAsync(id);
@@ -40,9 +43,32 @@ public class MovieController : ControllerBase
     }
 
     /// <summary>
+    /// Отримати актуальні фільми
+    /// </summary>
+    [HttpGet("recent")]
+    [Authorize]
+    public async Task<IActionResult> GetRecentMovies()
+    {
+        var movies = await _movieService.GetRecentMoviesAsync();
+        return Ok(movies);
+    }
+
+    /// <summary>
+    /// Отримати нові фільми
+    /// </summary>
+    [HttpGet("upcoming")]
+    [Authorize]
+    public async Task<IActionResult> GetUpcomingMovies()
+    {
+        var movies = await _movieService.GetUpcomingMoviesAsync();
+        return Ok(movies);
+    }
+
+    /// <summary>
     /// Додати новий фільм
     /// </summary>
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateMovie([FromBody] CreateMovieDTO movieDto)
     {
         var validationResult = await _validator.ValidateAsync(movieDto);
@@ -56,6 +82,7 @@ public class MovieController : ControllerBase
     /// Видалити фільм за ID
     /// </summary>
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteMovie(int id)
     {
         var result = await _movieService.DeleteMovieAsync(id);
