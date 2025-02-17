@@ -8,6 +8,8 @@ namespace Cinema.Core.Interfaces
     {
         Task<IEnumerable<MovieDTO>> GetAllMoviesAsync();
         Task<MovieDTO?> GetMovieByIdAsync(int id);
+        Task<IEnumerable<MovieDTO>> GetRecentMoviesAsync();  
+        Task<IEnumerable<MovieDTO>> GetUpcomingMoviesAsync(); 
         Task AddMovieAsync(CreateMovieDTO movieDto);
         Task<bool> DeleteMovieAsync(int id);
         Task<IEnumerable<MovieDTO>> GetMoviesWithRatingAbove(float rating);

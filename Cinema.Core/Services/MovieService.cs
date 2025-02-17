@@ -54,6 +54,38 @@ namespace Cinema.Core.Services
             };
         }
 
+        public async Task<IEnumerable<MovieDTO>> GetRecentMoviesAsync()
+        {
+            var movies = await _unitOfWork.Movies.GetRecentMoviesAsync();
+            return movies.Select(m => new MovieDTO
+            {
+                Id = m.MovieID,
+                Title = m.Title,
+                Description = m.Description,
+                ReleaseDate = m.ReleaseDate ?? DateTime.MinValue,
+                Rating = m.Rating,
+                Duration = m.Duration,
+                Genres = m.MovieGenres?.Select(g => g.Genre.Name).ToList() ?? new List<string>(),
+                Actors = m.MovieActors?.Select(a => a.Actor.Name).ToList() ?? new List<string>()
+            }).ToList();
+        }
+
+        public async Task<IEnumerable<MovieDTO>> GetUpcomingMoviesAsync()
+        {
+            var movies = await _unitOfWork.Movies.GetUpcomingMoviesAsync();
+            return movies.Select(m => new MovieDTO
+            {
+                Id = m.MovieID,
+                Title = m.Title,
+                Description = m.Description,
+                ReleaseDate = m.ReleaseDate ?? DateTime.MinValue,
+                Rating = m.Rating,
+                Duration = m.Duration,
+                Genres = m.MovieGenres?.Select(g => g.Genre.Name).ToList() ?? new List<string>(),
+                Actors = m.MovieActors?.Select(a => a.Actor.Name).ToList() ?? new List<string>()
+            }).ToList();
+        }
+
 
         public async Task AddMovieAsync(CreateMovieDTO movieDto)
         {

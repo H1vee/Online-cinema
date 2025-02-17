@@ -33,5 +33,28 @@ namespace Cinema.Infrastructure.Repositories
         {
             return await _context.Movies.Where(m => m.Rating > rating).ToListAsync();
         }
+
+        public async Task<IEnumerable<Movie>> GetRecentMoviesAsync()
+        {
+            var oneYearAgo = DateTime.UtcNow.AddYears(-1);
+            return await _context.Movies
+                .Where(m => m.ReleaseDate <= DateTime.UtcNow && m.ReleaseDate >= oneYearAgo)
+                .Include(m => m.MovieGenres)
+                    .ThenInclude(mg => mg.Genre)
+                .Include(m => m.MovieActors)
+                    .ThenInclude(ma => ma.Actor)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Movie>> GetUpcomingMoviesAsync()
+        {
+            return await _context.Movies
+                .Where(m => m.ReleaseDate > DateTime.UtcNow)
+                .Include(m => m.MovieGenres)
+                    .ThenInclude(mg => mg.Genre)
+                .Include(m => m.MovieActors)
+                    .ThenInclude(ma => ma.Actor)
+                .ToListAsync();
+        }
     }
 }

@@ -8,8 +8,6 @@ namespace Cinema.Core.Interfaces
     {
         Task<IEnumerable<SaleDTO>> GetAllSalesAsync();
         Task<SaleDTO?> GetSaleByIdAsync(int id);
-        Task AddSaleAsync(SaleDTO saleDto);
-        Task<bool> DeleteSaleAsync(int id);
         Task<IEnumerable<SaleDTO>> GetSalesByUserIdAsync(int userId);
     }
 }

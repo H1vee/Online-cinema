@@ -3,6 +3,7 @@ using Cinema.Core.DTOs;
 using Cinema.Core.Interfaces;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
 [Route("api/sales")]
@@ -18,9 +19,10 @@ public class SaleController : ControllerBase
     }
 
     /// <summary>
-    /// Îòðèìàòè âñ³ ïðîäàæ³
+    /// Отримати всі продажі
     /// </summary>
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetAllSales()
     {
         var sales = await _saleService.GetAllSalesAsync();
@@ -28,9 +30,10 @@ public class SaleController : ControllerBase
     }
 
     /// <summary>
-    /// Îòðèìàòè ïðîäàæ çà ID
+    /// Отримати продажу за SaleID
     /// </summary>
     [HttpGet("{id}")]
+    [Authorize]
     public async Task<IActionResult> GetSaleById(int id)
     {
         var sale = await _saleService.GetSaleByIdAsync(id);
@@ -39,35 +42,13 @@ public class SaleController : ControllerBase
     }
 
     /// <summary>
-    /// Ñòâîðèòè íîâó ïðîäàæó
-    /// </summary>
-    [HttpPost]
-    public async Task<IActionResult> CreateSale([FromBody] SaleDTO saleDto)
-    {
-        var validationResult = await _validator.ValidateAsync(saleDto);
-        if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
-
-        await _saleService.AddSaleAsync(saleDto);
-        return Ok("Sale created successfully");
-    }
-
- /// <summary>
     /// Отримати всі продажі користувача за UserID
     /// </summary>
     [HttpGet("user/{userId}")]
+    [Authorize]
     public async Task<IActionResult> GetSalesByUserId(int userId)
     {
         var sales = await _saleService.GetSalesByUserIdAsync(userId);
         return Ok(sales);
-    }
-    /// <summary>
-    /// Âèäàëèòè ïðîäàæó çà ID
-    /// </summary>
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteSale(int id)
-    {
-        var result = await _saleService.DeleteSaleAsync(id);
-        if (!result) return NotFound("Sale not found or cannot be deleted");
-        return Ok("Sale deleted successfully");
     }
 }

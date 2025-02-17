@@ -3,6 +3,7 @@ using Cinema.Core.DTOs;
 using Cinema.Core.Interfaces;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
 [Route("api/showtimes")]
@@ -20,6 +21,7 @@ public class ShowtimeController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetAllShowtimes()
     {
         var showtimes = await _showtimeService.GetAllShowtimesAsync();
@@ -27,6 +29,7 @@ public class ShowtimeController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize]
     public async Task<IActionResult> GetShowtimeById(int id)
     {
         var showtime = await _showtimeService.GetShowtimeByIdAsync(id);
@@ -34,14 +37,38 @@ public class ShowtimeController : ControllerBase
         return Ok(showtime);
     }
 
-    [HttpGet("upcoming")]
-    public async Task<IActionResult> GetUpcomingShowtimes()
+    [HttpGet("by-date")]
+    [Authorize]
+    public async Task<IActionResult> GetShowtimesByDate([FromQuery] DateTime date)
     {
-        var showtimes = await _showtimeService.GetUpcomingShowtimesAsync();
+        date = DateTime.SpecifyKind(date, DateTimeKind.Utc);
+        var showtimes = await _showtimeService.GetShowtimesByDateAsync(date);
+        return Ok(showtimes);
+    }
+
+    [HttpGet("by-genre")]
+    [Authorize]
+    public async Task<IActionResult> GetShowtimesByGenre([FromQuery] string genreName)
+    {
+        var showtimes = await _showtimeService.GetShowtimesByGenreAsync(genreName);
+        return Ok(showtimes);
+    }
+
+    [HttpGet("by-duration")]
+    [Authorize]
+    public async Task<IActionResult> GetShowtimesByDuration([FromQuery] int maxDuration)
+    {
+        if (maxDuration <= 0)
+        {
+            return BadRequest("Duration must be greater than 0.");
+        }
+
+        var showtimes = await _showtimeService.GetShowtimesByDurationAsync(maxDuration);
         return Ok(showtimes);
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateShowtime([FromBody] CreateShowtimeDTO showtimeDto)
     {
         var validationResult = await _validatorCreate.ValidateAsync(showtimeDto);
@@ -52,6 +79,7 @@ public class ShowtimeController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteShowtime(int id)
     {
         var result = await _showtimeService.DeleteShowtimeAsync(id);

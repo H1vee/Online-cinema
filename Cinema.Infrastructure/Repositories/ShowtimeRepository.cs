@@ -29,9 +29,33 @@ namespace Cinema.Infrastructure.Repositories
                 .FirstOrDefaultAsync(s => s.ShowtimeID == id);
         }
 
-        public async Task<IEnumerable<Showtime>>GetUpcomingShowtimes()
+        public async Task<IEnumerable<Showtime>> GetShowtimesByDate(DateTime date)
         {
-            return await _context.Showtimes.Where(s=> s.ShowDateTime > DateTime.UtcNow).ToListAsync();
+            return await _context.Showtimes
+                .Include(s => s.Movie)
+                .Include(s => s.Hall)
+                .Where(s => s.ShowDateTime.Date == date.Date)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Showtime>> GetShowtimesByGenre(string genreName)
+        {
+            return await _context.Showtimes
+                .Include(s => s.Movie)
+                .ThenInclude(m => m.MovieGenres)
+                .ThenInclude(mg => mg.Genre)
+                .Include(s => s.Hall)
+                .Where(s => s.Movie.MovieGenres.Any(mg => mg.Genre.Name.ToLower() == genreName.ToLower()))
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Showtime>> GetShowtimesByDurationAsync(int maxDuration)
+        {
+            return await _context.Showtimes
+                .Include(s => s.Movie)
+                .Include(s => s.Hall)
+                .Where(s => s.Movie.Duration.TotalMinutes <= maxDuration)
+                .ToListAsync();
         }
     }
 }

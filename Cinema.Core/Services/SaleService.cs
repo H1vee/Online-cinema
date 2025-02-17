@@ -22,39 +22,60 @@ namespace Cinema.Core.Services
         public async Task<IEnumerable<SaleDTO>> GetAllSalesAsync()
         {
             var sales = await _unitOfWork.Sales.GetAllAsync();
-            return _mapper.Map<IEnumerable<SaleDTO>>(sales);
+            var saleDtos = sales.Select(sale => new SaleDTO
+            {
+                Id = sale.SaleID,
+                UserFullName = sale.User?.FullName ?? "Unknown",
+                PurchaseDate = sale.PurchaseDate,
+                TotalAmount = sale.TotalAmount,
+                Tickets = sale.Tickets.Select(ticket => new SimpleTicketDTO
+                {
+                    Id = ticket.TicketID,
+                    FinalPrice = ticket.FinalPrice,
+                    Status = ticket.Status
+                }).ToList()
+            }).ToList();
+            return saleDtos;
         }
 
         public async Task<SaleDTO?> GetSaleByIdAsync(int id)
         {
             var sale = await _unitOfWork.Sales.GetByIdAsync(id);
-            return sale is null ? null : _mapper.Map<SaleDTO>(sale);
-        }
+            if (sale is null) return null;
 
-        public async Task AddSaleAsync(SaleDTO saleDto)
-        {
-            var sale = _mapper.Map<Sale>(saleDto);
-            await _unitOfWork.Sales.AddAsync(sale);
-            await _unitOfWork.CompleteAsync();
-        }
-
-        public async Task<bool> DeleteSaleAsync(int id)
-        {
-            var sale = await _unitOfWork.Sales.GetByIdAsync(id);
-            if (sale is null)
+            var saleDto = new SaleDTO
             {
-                return false;
-            }
-
-            _unitOfWork.Sales.Remove(sale);
-            await _unitOfWork.CompleteAsync();
-            return true;
+                Id = sale.SaleID,
+                UserFullName = sale.User?.FullName ?? "Unknown",
+                PurchaseDate = sale.PurchaseDate,
+                TotalAmount = sale.TotalAmount,
+                Tickets = sale.Tickets.Select(ticket => new SimpleTicketDTO
+                {
+                    Id = ticket.TicketID,
+                    FinalPrice = ticket.FinalPrice,
+                    Status = ticket.Status
+                }).ToList()
+            };
+            return saleDto;
         }
 
         public async Task<IEnumerable<SaleDTO>> GetSalesByUserIdAsync(int userId)
         {
             var sales = await _unitOfWork.Sales.GetSalesByUserId(userId);
-            return _mapper.Map<IEnumerable<SaleDTO>>(sales);
+
+            return sales.Select(sale => new SaleDTO
+            {
+                Id = sale.SaleID,
+                UserFullName = sale.User?.FullName ?? "Unknown",
+                PurchaseDate = sale.PurchaseDate,
+                TotalAmount = sale.TotalAmount,
+                Tickets = sale.Tickets.Select(t => new SimpleTicketDTO
+                {
+                    Id = t.TicketID,
+                    FinalPrice = t.FinalPrice,
+                    Status = t.Status
+                }).ToList()
+            }).ToList();
         }
     }
 }

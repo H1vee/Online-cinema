@@ -20,7 +20,7 @@ namespace Cinema.Core.Validators
 
             RuleFor(sale => sale.Tickets)
                 .NotEmpty().WithMessage("Sale must contain at least one ticket")
-                .ForEach(ticket => ticket.SetValidator(new TicketDTOValidator()));
+                .ForEach(ticket => ticket.SetValidator(new SimpleTicketDTOValidator()));
         }
     }
 }

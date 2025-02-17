@@ -9,7 +9,7 @@ namespace Cinema.Core.DTOs
         public string UserFullName { get; set; } = string.Empty;
         public DateTime PurchaseDate { get; set; }
         public decimal TotalAmount { get; set; }
-        public List<TicketDTO> Tickets { get; set; } = new();
+        public List<SimpleTicketDTO> Tickets { get; set; } = new();
     }
 }
 
